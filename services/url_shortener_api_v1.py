@@ -9,11 +9,16 @@ class URLShortenerAPIv1(object):
     """Create shortened URLs and convert them back.
     
     REST URIs for v1:
-    - [GET]     /v1/<SHORT_URL>      RETURNS data including both URLs, based on short URL.
-    - [POST]    /v1/<ORIGINAL_URL>   RETURNS data including both URLs, based on original URL.
+    - [GET]     /shorturl/v1/<SHORT_URL>      RETURNS data including both URLs, based on short URL.
+    - [POST]    /shorturl/v1/<ORIGINAL_URL>   RETURNS data including both URLs, based on original URL.
 
     The REST URIs are rate limited (2 requests per second) using the ratelimit module
-    found here: https://pypi.python.org/pypi/ratelimit/1.1.0
+    found here: https://pypi.python.org/pypi/ratelimit/1.1.0.
+
+    Motivation for the REST URI architecture came from GOOG.LE URL shortener. The idea is to let
+    METHODS tell us what we need to do (and not nest deeply). Thus, the REST URIs are simple and
+    return the same data (with just different inputs). The return data could be modified in future
+    versions.
     """
 
     def __init__(self):

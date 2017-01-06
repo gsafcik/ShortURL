@@ -7,6 +7,10 @@ from services import DB, DBSetup, URLShortenerAPIv1
 
 def main():
     """Initialize application."""
+    API_URI_NAME = 'shorturl'
+    VERSION = 'v1'
+    CURRENT_VERSION = '/' + '/'.join([API_URI_NAME, VERSION])
+
     conf = {
         '/': {
             'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
@@ -16,9 +20,9 @@ def main():
             'server.socket_host': '0.0.0.0'
         }
     }
-    current_version = '/v1/'
+
     cherrypy.engine.subscribe('start', DBSetup.setup_database)
-    cherrypy.quickstart(URLShortenerAPIv1(), current_version, conf)
+    cherrypy.quickstart(URLShortenerAPIv1(), CURRENT_VERSION, conf)
 
 
 if __name__ == '__main__':
