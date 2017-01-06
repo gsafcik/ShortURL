@@ -1,5 +1,3 @@
-#!/usr/local/bin/python3.5
-
 import cherrypy
 from services import URLShortener
 
@@ -8,30 +6,44 @@ from services import URLShortener
 class URLShortenerAPIv1(object):
     """Create shortened URLs and convert them back.
     
-    Basic versioning is used here.
-
-    REST URIs:
-    [GET]     /v1/<SHORT_URL>      RETURNS original URL from short URL.
-    [POST]    /v1/<original_URL>   RETURNS a short URL from a original URL.
-    [DELETE]  /v1/<SHORT_URL>      RETURNS "Success" on success or ERROR on error.
+    REST URIs for v1:
+    - [GET]     /v1/<SHORT_URL>      RETURNS data including both URLs, based on short URL.
+    - [POST]    /v1/<ORIGINAL_URL>   RETURNS data including both URLs, based on original URL.
     """
+
     def __init__(self):
+        """."""
         self.url_shortener = URLShortener()
 
 
     @cherrypy.tools.accept(media='text/plain')
     def GET(self, short_url):
+        """Return a set of JSON data based on the original URL.
+
+        If SUCCESS, the response will look like:
+        {
+            'short_url': 'http://shortu.rl/qM',
+            'original_url': 'http://example.com/hello-there/testing'
+            'created': '2017-01-05 02:57:10.366',
+        }
+
+
+        TODO add validation for short_url
+        """
         return self.url_shortener.convert_short_url_to_original_url(short_url)
- 
-    
+
+
     def POST(self, original_url):
-        """RETURN short URL from a original URL.
-    
-        @login_url must be string.
+        """Return a set of JSON data based on the original URL.
+
+        If SUCCESS, the response will look like:
+        {
+            'short_url': 'http://shortu.rl/qM',
+            'original_url': 'http://example.com/hello-there/testing'
+            'created': '2017-01-05 02:57:10.366',
+        }
+
+
         TODO add validation for original_url
         """
         return self.url_shortener.convert_original_url_to_short_url(original_url)
-
-    
-    def DELETE(self):
-        return 'call to DELETE'

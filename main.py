@@ -1,9 +1,7 @@
-#!/usr/local/bin/python3.5
-
-import cherrypy, sqlite3
+import cherrypy
 from urllib.parse import urlparse, urljoin
 
-from services import DB, DBSetup, URLShortener, URLShortenerAPIv1
+from services import DB, DBSetup, URLShortenerAPIv1
 # from services.factories import *
 
 

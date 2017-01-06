@@ -1,5 +1,3 @@
-#!/usr/local/bin/python3.5
-
 import json
 import re
 
@@ -9,10 +7,14 @@ from services import DB
 
 
 class URLShortener:
-    # BASE 62
+    """Provides functionality for shortening URLs and retrieving original URLs.
 
-    alphabet = str('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
-    base = len(alphabet)
+    URL shortening is based off IDs in the database, not just raw strings. BASE 62 was chosen as
+    the default after researching on Stack Overflow and Google. 
+    """
+
+    ALPHABET = str('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+    BASE = len(ALPHABET)
     SHORT_URL_BASE = 'http://shortu.rl'
 
 
@@ -67,28 +69,22 @@ class URLShortener:
 
 
     def insert_short_url_into_db(self, short_url, original_url, db_id):
-        """Returns DB ID."""
+        """Return a DB ID."""
         sql = """
             UPDATE url
                SET short_url = ?
              WHERE original_url = ?
                AND id = ?  -- to be sure
         """
-
-        # sql_check = """
-        #     SELECT * FROM url ORDER BY id DESC
-        # """
         params = (short_url, original_url, db_id)
         with DB() as db:
             affected = db.update(sql, params)
-            # print('affected:', affected)
-            # print('>>>>>>', db.query_all(sql_check))
 
         return affected
 
 
     def insert_orig_url_into_db(self, original_url):
-        """Returns DB ID."""
+        """Return a DB ID."""
         sql = """
             INSERT INTO url (original_url)
                  VALUES (?)
@@ -102,13 +98,13 @@ class URLShortener:
 
     def convert_id_to_short_url(self, db_id):
         """Convert database ID (pk) to shortened url string.
-        
+
         Returns str().
         """
         short_url = ''
         while db_id > 0:
-            short_url = self.alphabet[db_id % self.base] + short_url
-            db_id = db_id // self.base  # floor div
+            short_url = self.ALPHABET[db_id % self.BASE] + short_url
+            db_id = db_id // self.BASE  # floor div
         return urljoin(self.SHORT_URL_BASE, short_url)
 
     def convert_short_url_to_id(self, short_path):
@@ -120,5 +116,5 @@ class URLShortener:
 
         db_id = 0
         for char in short_url:
-            db_id = (db_id * self.base) + self.alphabet.index(char)
+            db_id = (db_id * self.BASE) + self.ALPHABET.index(char)
         return db_id
