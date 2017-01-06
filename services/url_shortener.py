@@ -1,7 +1,9 @@
 #!/usr/local/bin/python3.5
 
-from urllib.parse import urlparse, urljoin
 import json
+import re
+
+from urllib.parse import urlparse, urljoin
 
 from services import DB
 
@@ -14,6 +16,24 @@ class URLShortener:
     SHORT_URL_BASE = 'http://shortu.rl'
 
 
+    def convert_short_url_to_original_url(self, short_url):
+        """[GET] Takes a short url and gets original url.
+
+        Algorithm:
+        1. Take short URL
+        2. Convert short URL to DB ID
+        3. Do a lookup in DB by ID
+        4. Return JSON encoded data (see `columns_str` in `get_data_by_id()`)
+        """
+        url_parts_obj = urlparse(short_url)
+        short_path = url_parts_obj.path
+        db_id = self.convert_short_url_to_id(short_path)
+
+        data = dict(self.get_data_by_id(db_id))
+
+        return json.dumps(data)
+
+
     def convert_original_url_to_short_url(self, original_url):
         """[POST] Takes a original url and makes it a short url.
 
@@ -23,7 +43,6 @@ class URLShortener:
         3. Return JSON encoded data (see `columns_str` in `get_data_by_id()`)
         """
         db_id = self.insert_orig_url_into_db(original_url)
-        # print('--> db_id:', db_id)
         short_url = self.convert_id_to_short_url(db_id)
         affected = self.insert_short_url_into_db(short_url, original_url, db_id)
 
@@ -92,12 +111,14 @@ class URLShortener:
             db_id = db_id // self.base  # floor div
         return urljoin(self.SHORT_URL_BASE, short_url)
 
-    def convert_short_url_to_id(self, string):
+    def convert_short_url_to_id(self, short_path):
         """Convert short url string to database ID (pk).
 
         Returns int().
         """
+        delimeter, short_url = re.split('(/)', short_path)[1:]
+
         db_id = 0
-        for char in string:
+        for char in short_url:
             db_id = (db_id * self.base) + self.alphabet.index(char)
         return db_id

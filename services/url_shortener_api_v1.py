@@ -21,7 +21,7 @@ class URLShortenerAPIv1(object):
 
     @cherrypy.tools.accept(media='text/plain')
     def GET(self, short_url):
-        return 'call to GET'
+        return self.url_shortener.convert_short_url_to_original_url(short_url)
  
     
     def POST(self, original_url):
