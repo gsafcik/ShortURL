@@ -1,4 +1,6 @@
 import cherrypy
+
+from ratelimit import *
 from services import URLShortener
 
 
@@ -9,6 +11,9 @@ class URLShortenerAPIv1(object):
     REST URIs for v1:
     - [GET]     /v1/<SHORT_URL>      RETURNS data including both URLs, based on short URL.
     - [POST]    /v1/<ORIGINAL_URL>   RETURNS data including both URLs, based on original URL.
+
+    The REST URIs are rate limited (2 requests per second) using the ratelimit module
+    found here: https://pypi.python.org/pypi/ratelimit/1.1.0
     """
 
     def __init__(self):
@@ -17,6 +22,7 @@ class URLShortenerAPIv1(object):
 
 
     @cherrypy.tools.accept(media='text/plain')
+    @rate_limited(2)
     def GET(self, short_url):
         """Return a set of JSON data based on the original URL.
 
@@ -32,7 +38,7 @@ class URLShortenerAPIv1(object):
         """
         return self.url_shortener.convert_short_url_to_original_url(short_url)
 
-
+    @rate_limited(2)
     def POST(self, original_url):
         """Return a set of JSON data based on the original URL.
 
