@@ -5,7 +5,7 @@ from pathlib import Path
 class DB:
     """Database class for handling operations.
 
-    TODO make as an intermediate manager instead that can hook up specific databases.
+    TODO use SQLAlchemy or similar.
     """
 
     DB_NAME = 'url_shortener.db'

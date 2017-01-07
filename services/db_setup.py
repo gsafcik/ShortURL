@@ -3,12 +3,12 @@ import sqlite3
 from services import DB
 
 
-class DBSetup:
+class SQLite3DBSetup:
     """Setup Initial Database Schema."""
 
     @staticmethod
     def setup_database():
-        """Create the DB table."""
+        """Create the SQLite3DB table."""
         with sqlite3.connect(DB.DB_PATH) as conn:
             sql = """
                 CREATE TABLE IF NOT EXISTS url (

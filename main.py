@@ -1,8 +1,6 @@
 import cherrypy
-from urllib.parse import urlparse, urljoin
 
-from services import DB, DBSetup, URLShortenerAPIv1
-# from services.factories import *
+from services import SQLite3DBSetup, ShortURLAPIv1
 
 
 def main():
@@ -17,12 +15,11 @@ def main():
             'tools.sessions.on': True,
             'tools.response_headers.on': True,
             'tools.response_headers.headers': [('Content-Type', 'text/plain')],
-            'server.socket_host': '0.0.0.0'
         }
     }
-
-    cherrypy.engine.subscribe('start', DBSetup.setup_database)
-    cherrypy.quickstart(URLShortenerAPIv1(), CURRENT_VERSION, conf)
+    cherrypy.config.update({'server.socket_host': '0.0.0.0'})
+    cherrypy.engine.subscribe('start', SQLite3DBSetup.setup_database)
+    cherrypy.quickstart(ShortURLAPIv1(), CURRENT_VERSION, conf)
 
 
 if __name__ == '__main__':
