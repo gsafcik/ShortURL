@@ -48,7 +48,7 @@ class DB:
         return conn
 
 
-    def query(self, sql, params=()):
+    def fetch(self, sql, params=()):
         """Get specific result in a dictionary.
         
         Typically used for SELECT statements.
@@ -56,17 +56,6 @@ class DB:
         """
         self.cursor.execute(sql, params)
         return self.cursor.fetchone()
-
-
-    def query_all(self, sql, params=()):
-        """Get specific result in a dictionary.
-
-        Typically used for SELECT statements.
-        RETURN: fetched data (multiple rows).
-        """
-        print(sql, params)
-        self.cursor.execute(sql, params)
-        return self.cursor.fetchall()
 
 
     def insert(self, sql, params=()):

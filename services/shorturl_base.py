@@ -19,6 +19,6 @@ class ShortURLBase:
         """.format(columns_str)
         params = (db_id,)
         with DB() as db:
-            data = db.query(sql, params)
+            data = db.fetch(sql, params)
 
         return data
