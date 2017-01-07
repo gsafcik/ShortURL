@@ -35,6 +35,7 @@ for both `GET` and `POST`:
 
 * **Code:** 200 <br />
     **Content:**
+    
     ```bash
     {
         'short_url': 'http://shortu.rl/qM',
@@ -82,17 +83,18 @@ TBD
     >>> r = s.get('http://shortu.rl/v1', params={'short_url': 'http://shortu.rl/rc'})
     >>> r.status_code, r.text
     (404, '')
+    ```
 
 - **Failed `GET` (_incorrect `<short_url>`_)**
-
+    
     TBD
 
 - **Failed `POST` (_missing `shorturl` in URI_)**
-
+    
     TBD
 
 - **Failed `POST` (_incorrect `<original_url>`_)**
-
+    
     TBD
 
 ## Rate Limited
