@@ -25,13 +25,7 @@ class ShortToURL(ShortURLBase):
         short_url, status = self.escape_url(short_url)
         url_parts_obj = urlparse(short_url)
         short_path = url_parts_obj.path
-
-        try:
-            db_id = self.convert_short_url_to_id(short_path)
-        except ValueError:
-            # if short_path is empty string, etc
-            raise cherrypy.HTTPError(400, 'ERROR_MALFORMED_REQUEST')
-
+        db_id = self.convert_short_url_to_id(short_path)
 
         try:
             data = dict(self.get_data_by_id(db_id))

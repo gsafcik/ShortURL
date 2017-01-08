@@ -26,13 +26,6 @@ class ShortURLAPIv1(object):
     def __init__(self):
         """Initialization instantiations."""
         self.shorturl = ShortURL()
-        self.check_method()
-
-
-    def check_method(self):
-        """Utility method to make sure that the sent METHOD is an accepted METHOD."""
-        if cherrypy.request.method not in ['GET', 'POST']:
-            raise cherrypy.HTTPError(405)
 
 
     @cherrypy.tools.accept(media='text/plain')
@@ -47,9 +40,6 @@ class ShortURLAPIv1(object):
             'original_url': 'http://example.com/hello-there/testing',
             'created': '2017-01-05 02:57:10.366'
         }
-
-
-        TODO add simple validation for short_url
         """
         try:
             short_url = vpath.get('short_url')
@@ -72,9 +62,6 @@ class ShortURLAPIv1(object):
             'original_url': 'http://example.com/hello-there/testing',
             'created': '2017-01-05 02:57:10.366'
         }
-
-
-        TODO add simple validation for original_url
         """
         try:
             original_url = vpath.get('original_url')
