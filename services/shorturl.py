@@ -1,8 +1,7 @@
 import json
 import cherrypy
-import sys
 
-from services import DB, URLToShort, ShortToURL
+from services import URLToShort, ShortToURL
 
 
 class ShortURL:
