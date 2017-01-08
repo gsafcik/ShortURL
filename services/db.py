@@ -28,7 +28,10 @@ class DB:
 
     def __exit__(self, exception_type, exception_value, traceback):
         """Exit needed to make this a context manager."""
-        self.conn.commit()
+        if exception_type:
+            self.conn.rollback()
+        else:
+            self.conn.commit()
         self.conn.close()
 
 

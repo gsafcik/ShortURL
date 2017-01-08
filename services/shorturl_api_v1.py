@@ -1,4 +1,6 @@
 import cherrypy
+import json
+import sys
 
 from ratelimit import *
 from services import ShortURL
@@ -21,9 +23,18 @@ class ShortURLAPIv1(object):
     versions.
     """
 
+    ACCEPTED_METHODS = ['GET', 'POST']
+
     def __init__(self):
         """Initialization instantiations."""
         self.shorturl = ShortURL()
+        self.check_method()
+
+
+    def check_method(self):
+        """Utility method to make sure that the sent METHOD is an accepted METHOD."""
+        if cherrypy.request.method not in self.ACCEPTED_METHODS:
+            raise cherrypy.HTTPError(405)
 
 
     @cherrypy.tools.accept(media='text/plain')
@@ -31,7 +42,8 @@ class ShortURLAPIv1(object):
     def GET(self, short_url):
         """Return a set of data based on the original URL.
 
-        If SUCCESS, the response will look like:
+        successful example:
+
         {
             'short_url': 'http://shortu.rl/qM',
             'original_url': 'http://example.com/hello-there/testing',
@@ -43,11 +55,13 @@ class ShortURLAPIv1(object):
         """
         return self.shorturl.short_to_original_json(short_url)
 
+
     @rate_limited(2)
     def POST(self, original_url):
         """Return a set of data based on the original URL.
 
-        If SUCCESS, the response will look like:
+        successful example:
+
         {
             'short_url': 'http://shortu.rl/qM',
             'original_url': 'http://example.com/hello-there/testing',

@@ -15,7 +15,7 @@ class ShortURLBase:
         sql = """
             SELECT {}
               FROM url
-             WHERE id = ?  -- to be sure
+             WHERE id = ?
         """.format(columns_str)
         params = (db_id,)
         with DB() as db:

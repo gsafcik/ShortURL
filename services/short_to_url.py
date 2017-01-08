@@ -1,4 +1,7 @@
 import re
+import cherrypy
+import sys
+import sqlite3
 
 from urllib.parse import urlparse
 
@@ -11,6 +14,8 @@ class ShortToURL(ShortURLBase):
     def convert_short_url_to_original_url(self, short_url):
         """Take a short url and retrieve the original url.
 
+        Typically supports the GET Method.
+
         Algorithm:
         1. Take short URL
         2. Convert short URL to DB ID
@@ -19,9 +24,18 @@ class ShortToURL(ShortURLBase):
         """
         url_parts_obj = urlparse(short_url)
         short_path = url_parts_obj.path
-        db_id = self.convert_short_url_to_id(short_path)
 
-        data = dict(self.get_data_by_id(db_id))
+        try:
+            db_id = self.convert_short_url_to_id(short_path)
+        except ValueError:
+            # if short_path is empty string, etc
+            raise cherrypy.HTTPError(400, 'ERROR_MALFORMED_REQUEST')
+
+
+        try:
+            data = dict(self.get_data_by_id(db_id))
+        except (sqlite3.Error, TypeError):
+            raise cherrypy.HTTPError(404, 'ERROR_ORIGINAL_URL_NOT_FOUND')
 
         return data
 

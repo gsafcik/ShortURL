@@ -1,4 +1,6 @@
 import json
+import cherrypy
+import sys
 
 from services import DB, URLToShort, ShortToURL
 
@@ -10,6 +12,8 @@ class ShortURL:
     (https://en.wikipedia.org/wiki/Bijection) and BASE 62 was chosen as the default after
     researching on Stack Overflow and Google.
     """
+    STATUS_OK = 'OK'
+    STATUS_ERROR = 'ERROR'
 
     def __init__(self):
         """Initialization instantiations."""
@@ -17,14 +21,30 @@ class ShortURL:
         self.url_to_short = URLToShort()
 
 
+    def standard_json_error(self, error):
+        """Send standard Cherrypy error response plus a standardized response through API."""
+        cherrypy.response.status = error.status
+        return json.dumps(dict(status=self.STATUS_ERROR, code=error.status, error=error._message))
+
+
+    def standard_json_success(self, data):
+        data.update(dict(status=self.STATUS_OK))
+        return json.dumps(data)        
+
+
     def short_to_original_json(self, short_url):
         """[GET] Takes a short url and retrieves the original url.
 
         Returns Dict() converted to JSON.
         """
-        data = self.short_to_url.convert_short_url_to_original_url(short_url)
+        try:
+            data = self.short_to_url.convert_short_url_to_original_url(short_url)
+        except cherrypy._cperror.HTTPError as e:
+            # Note: use dir() to find all attributes of the HTTPError
+            # object to access and create custom error responses
+            return self.standard_json_error(e)
 
-        return json.dumps(data)
+        return self.standard_json_success(data)
 
 
     def original_to_short_json(self, original_url):
@@ -32,6 +52,11 @@ class ShortURL:
 
         Returns Dict() converted to JSON.
         """
-        data = self.url_to_short.convert_original_url_to_short_url(original_url)
+        try:
+            data = self.url_to_short.convert_original_url_to_short_url(original_url)
+        except cherrypy._cperror.HTTPError as e:
+            # Note: use dir() to find all attributes of the HTTPError
+            # object to access and create custom error responses
+            return self.standard_json_error(e)
 
-        return json.dumps(data)
+        return self.standard_json_success(data)
