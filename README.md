@@ -82,6 +82,7 @@ _AND_
 
 | Error | HTTP Status Code | Description |
 | --- | --- | --- |
+| `ERROR_SHORT_URL_MALFORMED` | `400` | The `short_url` parameter value is not complete (or malformed in some way) |
 | `ERROR_INCORRECT_OR_MISSING_PARAM` | `400` | Missing the parameter value or the entire parameter altogether |
 | `ERROR_URL_DATA_NOT_PROCESSED` | `400` | Could not process the `original_url` |
 | `ERROR_ORIGINAL_URL_NOT_FOUND` | `404` | Could not find data based on given `short_url` |
@@ -173,7 +174,6 @@ but keep in mind that the **ShortURL API** is part of a suite of APIs offered by
 ## Roadmap
 
 - Add a front-end website for the ShortURL API
-- Add CORS for websites
 - Add API keys
 - Add authorization via Oauth - TBD
 - Add Analytics

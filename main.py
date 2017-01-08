@@ -15,7 +15,10 @@ def secureheaders():
     headers = cherrypy.response.headers
     headers['X-Frame-Options'] = 'SAMEORIGIN'
     headers['X-XSS-Protection'] = '1; mode=block'
-    # headers['Access-Control-Allow-Origin'] = '*'  # not sure if needed/wanted
+    headers['Access-Control-Allow-Origin'] = '*'  # CSRF concern. However, we don't expose any
+                                                  # sensitive info nor do we authenticate/authorize
+                                                  # users. When those are implemented, we might need
+                                                  # to readdress this security concern.
 
 
 def main():
@@ -27,7 +30,7 @@ def main():
     conf = {
         '/': {
             'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
-            'tools.sessions.on': True,
+            # 'tools.sessions.on': True,  # future need?
             'tools.response_headers.on': True,
             'tools.response_headers.headers': [('Content-Type', 'text/plain')],
             'tools.secureheaders.on': True
