@@ -16,11 +16,15 @@ Create a shortened URL from an original URL and retrieve an original URL from a 
 
 `GET` format:
 
-`/shorturl/v1/<SHORT_URL>`
+```bash
+http://shortu.rl/shorturl/v1/shorturl/v1/<SHORT_URL>
+```
 
 `POST` format:
 
-`/shorturl/v1/<ORIGINAL_URL>`
+```bash
+http://shortu.rl/shorturl/v1/shorturl/v1/<ORIGINAL_URL>
+```
   
 ## Success Response
   
@@ -78,10 +82,10 @@ _AND_
 
 | Error | HTTP Status Code | Description |
 | --- | --- | --- |
-| `ERROR_INCORRECT_OR_MISSING_PARAM` | `400` | |
-| `ERROR_URL_DATA_NOT_PROCESSED` | `400` | |
-| `ERROR_ORIGINAL_URL_NOT_FOUND` | `404` | |
-| `ERROR_URL_DATA_NOT_FOUND` | `404` | |
+| `ERROR_INCORRECT_OR_MISSING_PARAM` | `400` | Missing the parameter value or the entire parameter altogether |
+| `ERROR_URL_DATA_NOT_PROCESSED` | `400` | Could not process the `original_url` |
+| `ERROR_ORIGINAL_URL_NOT_FOUND` | `404` | Could not find data based on given `short_url` |
+| `ERROR_URL_DATA_NOT_FOUND` | `404` | Could not find data even though it should be there (_internal error_) |
 
 If you pass in an incorrect base URL, then you will only receive an HTTP status code (no JSON formatted **Error**).
 
