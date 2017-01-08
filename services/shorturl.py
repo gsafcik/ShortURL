@@ -40,17 +40,30 @@ class ShortURL:
         return json.dumps(data)
 
 
+    def convert_urls(self, func, params_list):
+        """Take a list of params and apply the provided function to each item in the list.
+
+        Note: the default use case is a *single url* in the params list.
+        """
+        try:
+            data = list(map(func, params_list))[0]  # "unwrap" list to expose data dict
+        except cherrypy._cperror.HTTPError as e:
+            # Note: use dir() to find all attributes of the HTTPError
+            # object to access and create custom error responses
+            return self.standard_json_error(e)
+
+        return data
+
+
     def short_to_original_json(self, short_url):
         """[GET] Takes a short url and retrieves the original url.
 
         Returns Dict() converted to JSON.
         """
-        try:
-            data = self.short_to_url.convert_short_url_to_original_url(short_url)
-        except cherrypy._cperror.HTTPError as e:
-            # Note: use dir() to find all attributes of the HTTPError
-            # object to access and create custom error responses
-            return self.standard_json_error(e)
+        data = self.convert_urls(
+            self.short_to_url.convert_short_url_to_original_url,
+            short_url.split()  # need to pass in an list here so split() will do
+        )
 
         return self.standard_json_success(data)
 
@@ -60,11 +73,9 @@ class ShortURL:
 
         Returns Dict() converted to JSON.
         """
-        try:
-            data = self.url_to_short.convert_original_url_to_short_url(original_url)
-        except cherrypy._cperror.HTTPError as e:
-            # Note: use dir() to find all attributes of the HTTPError
-            # object to access and create custom error responses
-            return self.standard_json_error(e)
+        data = self.convert_urls(
+            self.url_to_short.convert_original_url_to_short_url,
+            original_url.split()  # need to pass in an list here so split() will do
+        )
 
         return self.standard_json_success(data)

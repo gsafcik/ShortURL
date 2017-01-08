@@ -1,6 +1,4 @@
 import cherrypy
-import json
-import sys
 
 from ratelimit import *
 from services import ShortURL
