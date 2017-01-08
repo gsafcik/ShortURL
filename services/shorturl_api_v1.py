@@ -28,6 +28,18 @@ class ShortURLAPIv1(object):
         self.shorturl = ShortURL()
 
 
+    def retrieve_param(self, identifier, params):
+        """Retrieve the specified parameter."""
+        try:
+            identified_param = params.get(identifier)
+            if not identified_param:
+                raise cherrypy.HTTPError(400, 'ERROR_INCORRECT_OR_MISSING_PARAM')
+        except cherrypy._cperror.HTTPError as e:
+            return self.shorturl.standard_json_error(e)
+
+        return identified_param
+
+
     @cherrypy.tools.accept(media='text/plain')
     @rate_limited(2)
     def GET(self, **vpath):
@@ -41,14 +53,7 @@ class ShortURLAPIv1(object):
             'created': '2017-01-05 02:57:10.366'
         }
         """
-        try:
-            short_url = vpath.get('short_url')
-            if not short_url:
-                raise cherrypy.HTTPError(400, 'ERROR_INCORRECT_OR_MISSING_PARAM')
-        except cherrypy._cperror.HTTPError as e:
-            return self.shorturl.standard_json_error(e)
-
-        return self.shorturl.short_to_original_json(short_url)
+        return self.shorturl.short_to_original_json(self.retrieve_param('short_url', vpath))
 
 
     @rate_limited(2)
@@ -63,11 +68,4 @@ class ShortURLAPIv1(object):
             'created': '2017-01-05 02:57:10.366'
         }
         """
-        try:
-            original_url = vpath.get('original_url')
-            if not original_url:
-                raise cherrypy.HTTPError(400, 'ERROR_INCORRECT_OR_MISSING_PARAM')
-        except cherrypy._cperror.HTTPError as e:
-            return self.shorturl.standard_json_error(e)
-
-        return self.shorturl.original_to_short_json(original_url)
+        return self.shorturl.original_to_short_json(self.retrieve_param('original_url', vpath))
