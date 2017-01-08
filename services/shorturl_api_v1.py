@@ -37,7 +37,7 @@ class ShortURLAPIv1(object):
 
     @cherrypy.tools.accept(media='text/plain')
     @rate_limited(2)
-    def GET(self, short_url):
+    def GET(self, **vpath):
         """Return a set of data based on the original URL.
 
         successful example:
@@ -51,11 +51,18 @@ class ShortURLAPIv1(object):
 
         TODO add simple validation for short_url
         """
+        try:
+            short_url = vpath.get('short_url')
+            if not short_url:
+                raise cherrypy.HTTPError(400, 'ERROR_INCORRECT_OR_MISSING_PARAM')
+        except cherrypy._cperror.HTTPError as e:
+            return self.shorturl.standard_json_error(e)
+
         return self.shorturl.short_to_original_json(short_url)
 
 
     @rate_limited(2)
-    def POST(self, original_url):
+    def POST(self, **vpath):
         """Return a set of data based on the original URL.
 
         successful example:
@@ -69,4 +76,11 @@ class ShortURLAPIv1(object):
 
         TODO add simple validation for original_url
         """
+        try:
+            original_url = vpath.get('original_url')
+            if not original_url:
+                raise cherrypy.HTTPError(400, 'ERROR_INCORRECT_OR_MISSING_PARAM')
+        except cherrypy._cperror.HTTPError as e:
+            return self.shorturl.standard_json_error(e)
+
         return self.shorturl.original_to_short_json(original_url)
