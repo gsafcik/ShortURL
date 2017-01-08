@@ -12,8 +12,6 @@ class ShortURL:
     (https://en.wikipedia.org/wiki/Bijection) and BASE 62 was chosen as the default after
     researching on Stack Overflow and Google.
     """
-    STATUS_OK = 'OK'
-    STATUS_ERROR = 'ERROR'
 
     def __init__(self):
         """Initialization instantiations."""
@@ -24,12 +22,22 @@ class ShortURL:
     def standard_json_error(self, error):
         """Send standard Cherrypy error response plus a standardized response through API."""
         cherrypy.response.status = error.status
-        return json.dumps(dict(status=self.STATUS_ERROR, code=error.status, error=error._message))
+        return json.dumps(
+            dict(
+                status=self.short_to_url.STATUS_ERROR,  # just need any subclass of ShortURLBase
+                code=error.status,
+                error=error._message
+            )
+        )
 
 
     def standard_json_success(self, data):
-        data.update(dict(status=self.STATUS_OK))
-        return json.dumps(data)        
+        """Send standardized success response plus add success status."""
+        if not data.get('status'):
+            data.update(
+                dict(status=self.short_to_url.STATUS_OK)  # just need any subclass of ShortURLBase
+            )
+        return json.dumps(data)
 
 
     def short_to_original_json(self, short_url):

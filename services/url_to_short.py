@@ -20,6 +20,7 @@ class URLToShort(ShortURLBase):
         2. Convert ID to short url
         3. Return desired data
         """
+        original_url, status = self.escape_url(original_url)
         try:
             db_id = self.insert_orig_url_into_db(original_url)
         except (sqlite3.Error, TypeError):
@@ -32,6 +33,8 @@ class URLToShort(ShortURLBase):
             data = dict(self.get_data_by_id(db_id))
         except (sqlite3.Error, TypeError):
             raise cherrypy.HTTPError(404, 'ERROR_URL_DATA_NOT_FOUND')
+
+        data.update(status)
 
         return data
 

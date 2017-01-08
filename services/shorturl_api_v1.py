@@ -23,8 +23,6 @@ class ShortURLAPIv1(object):
     versions.
     """
 
-    ACCEPTED_METHODS = ['GET', 'POST']
-
     def __init__(self):
         """Initialization instantiations."""
         self.shorturl = ShortURL()
@@ -33,7 +31,7 @@ class ShortURLAPIv1(object):
 
     def check_method(self):
         """Utility method to make sure that the sent METHOD is an accepted METHOD."""
-        if cherrypy.request.method not in self.ACCEPTED_METHODS:
+        if cherrypy.request.method not in ['GET', 'POST']:
             raise cherrypy.HTTPError(405)
 
 

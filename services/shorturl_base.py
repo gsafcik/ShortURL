@@ -1,3 +1,5 @@
+import html
+
 from services import DB
 
 
@@ -7,6 +9,19 @@ class ShortURLBase:
     ALPHABET = str('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
     BASE = len(ALPHABET)
     SHORT_URL_BASE = 'http://shortu.rl'
+
+    STATUS_OK = 'OK'
+    STATUS_ERROR = 'ERROR'
+    STATUS_SUSPICIOUS = 'SUSPICIOUS'
+
+
+    def escape_url(self, url):
+        """Don't trust the URL."""
+        status = dict()
+        escaped_url = html.escape(url)
+        if escaped_url is not url:
+            status = dict(status=self.STATUS_SUSPICIOUS)
+        return escaped_url, status
 
 
     def get_data_by_id(self, db_id):
