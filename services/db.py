@@ -2,7 +2,7 @@ import sqlite3
 from pathlib import Path
 
 
-class DB:
+class DB(object):
     """Database class for handling operations.
 
     TODO use SQLAlchemy or similar.

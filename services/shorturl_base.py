@@ -3,7 +3,7 @@ import html
 from services import DB
 
 
-class ShortURLBase:
+class ShortURLBase(object):
     """Base for shared functionality of URL shortening services."""
 
     ALPHABET = str('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')

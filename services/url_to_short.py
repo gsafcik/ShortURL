@@ -1,5 +1,4 @@
 import cherrypy
-import sys
 import sqlite3
 
 from urllib.parse import urljoin

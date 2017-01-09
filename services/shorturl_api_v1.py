@@ -33,12 +33,13 @@ class ShortURLAPIv1(object):
             if not identified_param:
                 raise cherrypy.HTTPError(400, 'ERROR_INCORRECT_OR_MISSING_PARAM')
         except cherrypy._cperror.HTTPError as e:
-            return self.shorturl.standard_json_error(e)
+            return self.shorturl.standardize_error(e)
 
         return identified_param
 
 
     @cherrypy.tools.accept(media='text/plain')
+    @cherrypy.tools.json_out()
     @rate_limited(2)
     def GET(self, **vpath):
         """Return a set of data based on the original URL.
@@ -51,9 +52,17 @@ class ShortURLAPIv1(object):
             'created': '2017-01-05 02:57:10.366'
         }
         """
-        return self.shorturl.short_to_original_json(self.retrieve_param('short_url', vpath))
+        short_url = self.retrieve_param('short_url', vpath)
+        try:
+            if short_url.get('status'):  # if a dict (not a str), return
+                return short_url
+        except AttributeError:
+            pass
+
+        return self.shorturl.short_to_original(short_url)
 
 
+    @cherrypy.tools.json_out()
     @rate_limited(2)
     def POST(self, **vpath):
         """Return a set of data based on the original URL.
@@ -66,4 +75,11 @@ class ShortURLAPIv1(object):
             'created': '2017-01-05 02:57:10.366'
         }
         """
-        return self.shorturl.original_to_short_json(self.retrieve_param('original_url', vpath))
+        original_url = self.retrieve_param('original_url', vpath)
+        try:
+            if original_url.get('status'):  # if a dict (not a str), return
+                return original_url
+        except AttributeError:
+            pass
+
+        return self.shorturl.original_to_short(original_url)

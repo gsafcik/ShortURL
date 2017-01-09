@@ -174,6 +174,6 @@ but keep in mind that the **ShortURL API** is part of a suite of APIs offered by
 ## Roadmap
 
 - Add a front-end website for the ShortURL API
-- Add API keys
-- Add authorization via Oauth - TBD
+- Add API keys for tracking purposes - if Oauth1.0a will be a while
+- Add authorization via Oauth1.0a - TBD
 - Add Analytics

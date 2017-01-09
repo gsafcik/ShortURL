@@ -3,7 +3,7 @@ import sqlite3
 from services import DB
 
 
-class SQLite3DBSetup:
+class SQLite3DBSetup(object):
     """Setup Initial Database Schema."""
 
     @staticmethod
