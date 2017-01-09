@@ -38,7 +38,7 @@ class ShortURLAPIv1(object):
         return identified_param
 
 
-    @cherrypy.tools.accept(media='text/plain')
+    @cherrypy.tools.json_in()
     @cherrypy.tools.json_out()
     @rate_limited(2)
     def GET(self, **vpath):
@@ -53,15 +53,13 @@ class ShortURLAPIv1(object):
         }
         """
         short_url = self.retrieve_param('short_url', vpath)
-        try:
-            if short_url.get('status'):  # if a dict (not a str), return
-                return short_url
-        except AttributeError:
-            pass
+        if not isinstance(short_url, str):  # if not string, then dict with error
+            return short_url
 
         return self.shorturl.short_to_original(short_url)
 
 
+    @cherrypy.tools.json_in()
     @cherrypy.tools.json_out()
     @rate_limited(2)
     def POST(self, **vpath):
@@ -76,10 +74,7 @@ class ShortURLAPIv1(object):
         }
         """
         original_url = self.retrieve_param('original_url', vpath)
-        try:
-            if original_url.get('status'):  # if a dict (not a str), return
-                return original_url
-        except AttributeError:
-            pass
+        if not isinstance(original_url, str):  # if not string, then dict with error
+            return original_url
 
         return self.shorturl.original_to_short(original_url)

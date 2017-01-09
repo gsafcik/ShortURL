@@ -12,7 +12,7 @@ class ShortURLBase(object):
 
     STATUS_OK = 'OK'
     STATUS_ERROR = 'ERROR'
-    STATUS_SUSPICIOUS = 'SUSPICIOUS'
+    STATUS_MODIFIED = 'MODIFIED'
 
 
     def escape_url(self, url):
@@ -20,7 +20,7 @@ class ShortURLBase(object):
         status = dict()
         escaped_url = html.escape(url)
         if escaped_url is not url:
-            status = dict(status=self.STATUS_SUSPICIOUS)
+            status = dict(status=self.STATUS_MODIFIED)
         return escaped_url, status
 
 

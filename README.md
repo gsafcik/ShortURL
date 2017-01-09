@@ -37,7 +37,7 @@ _AND_
 - `short_url` - This is the shortened URL created by the **ShortURL API**
 - `original_url` - This is the original URL given to the **ShortURL API**
 - `created` - This is the date the `short_url` was created (format: `yyyy-mm-dd hh:mm:ss`)
-- `status` - Tells if the request is `OK`, `SUSPICIOUS`, or an `ERROR`
+- `status` - Tells if the request is `OK`, `MODIFIED`, or an `ERROR`
 
 **Example:**
 
@@ -63,7 +63,7 @@ _AND_
 
 - `code` - This is the HTTP status code
 - `error` - This is the message passed back (details in **Error Codes** section below)
-- `status` - Tells if the request is `OK`, `SUSPICIOUS`, or an `ERROR`
+- `status` - Tells if the request is `OK`, `MODIFIED`, or an `ERROR`
 
 **Example:**
 
@@ -77,6 +77,12 @@ _AND_
         'status': 'ERROR'
     }
     ```
+
+## Status Codes
+
+- `OK` - Everything is "a ok"
+- `MODIFIED` - Something in the URL was modified for security (certain characters to HTML-safe sequences)
+- `ERROR` - There was an error so processing was stopped (includes description for free)
 
 ## Error Codes
 
@@ -106,6 +112,14 @@ If you pass in an incorrect base URL, then you will only receive an HTTP status 
     $ curl "http://shortu.rl/shorturl/v1?short_url=http://shortu.rl/rQ"
     {"created": "2017-01-08 05:20:15.320", "original_url": "http://example.com/", "status": "OK", "short_url": "http://shortu.rl/rQ"}
     ```
+
+- **Successful `GET` (_with **multiple** params in `original_url`_)**
+    
+    ```bash
+    $ curl http://shortu.rl/shorturl/v1 --data-urlencode "original_url=http://www.somedomain.com/long/url/test/2?params=test&something=other"
+    ```
+
+    _**Note:** If you use the standard `-d` command, CURL will strip everything after the `&` so be sure to use the `--data-urlencode` option instead.
 
 - **Successful `POST`**
 
@@ -173,6 +187,7 @@ but keep in mind that the **ShortURL API** is part of a suite of APIs offered by
 
 ## Roadmap
 
+- Add unit testing
 - Add a front-end website for the ShortURL API
 - Add API keys for tracking purposes - if Oauth1.0a will be a while
 - Add authorization via Oauth1.0a - TBD

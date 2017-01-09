@@ -17,8 +17,8 @@ def secureheaders():
     headers['X-XSS-Protection'] = '1; mode=block'
     headers['Access-Control-Allow-Origin'] = '*'  # CSRF concern. However, we don't expose any
                                                   # sensitive info nor do we authenticate/authorize
-                                                  # users. When those are implemented, we might need
-                                                  # to readdress this security concern.
+                                                  # users. When those are implemented, we might
+                                                  # need to readdress this security concern.
 
 
 def main():
@@ -32,8 +32,12 @@ def main():
             'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
             # 'tools.sessions.on': True,  # future need?
             'tools.response_headers.on': True,
-            'tools.response_headers.headers': [('Content-Type', 'text/plain')],
-            'tools.secureheaders.on': True
+            'tools.response_headers.headers': [('Content-Type', 'application/json')],
+            'tools.secureheaders.on': True,
+            'tools.json_in.force': False  # "If the 'force' argument is True (the default), then
+                                          # entities of other content types will not be allowed;
+                                          # '415 Unsupported Media Type' is raised instead." per
+                                          # http://svn.cherrypy.org/trunk/cherrypy/lib/jsontools.py.
         }
     }
     cherrypy.config.update({'server.socket_host': '0.0.0.0'})
