@@ -14,8 +14,8 @@ Create a shortened URL from an original URL and retrieve an original URL from a 
 `CURL` and Python `Requests` library do not require passing of the `Content-Type` header.
 If using AJAX, one of the following `Content-Type` headers must be used:
 
-- 'Content-Type: application/json'
-- 'Content-Type: text/plain'
+- `'Content-Type: application/json'`
+- `'Content-Type: text/plain'`
 
 _**Note:** you will need to pass along valid JSON data with them as well. Please see example below._
 
