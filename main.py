@@ -4,6 +4,25 @@ from services import SQLite3DBSetup, ShortURLAPIv1
 
 
 @cherrypy.tools.register('before_finalize')
+def corsheaders():
+    headers = cherrypy.response.headers
+    def prepare_cors_allow_headers():
+        filter_allow_methods = ['POST', 'GET']
+        allowed = list()
+        allowed = ', '.join([method for method in headers.get('Allow').split(', ')
+                           if method in filter_allow_methods])
+        return allowed
+
+    headers['Access-Control-Allow-Origin'] = '*'  # CSRF concern. However, we don't expose any
+                                                  # sensitive info nor do we authenticate/authorize
+                                                  # users. When those are implemented, we might
+                                                  # need to readdress this security concern.
+    headers['Access-Control-Allow-Headers'] = 'Content-Type'
+    headers['Access-Control-Allow-Methods'] = prepare_cors_allow_headers()
+    headers['Access-Control-Max-Age'] = '86400'
+
+
+@cherrypy.tools.register('before_finalize')
 def secureheaders():
     """Copied from the CherryPy doccs and modeled after Google's URL Shortener header values.
 
@@ -15,10 +34,6 @@ def secureheaders():
     headers = cherrypy.response.headers
     headers['X-Frame-Options'] = 'SAMEORIGIN'
     headers['X-XSS-Protection'] = '1; mode=block'
-    headers['Access-Control-Allow-Origin'] = '*'  # CSRF concern. However, we don't expose any
-                                                  # sensitive info nor do we authenticate/authorize
-                                                  # users. When those are implemented, we might
-                                                  # need to readdress this security concern.
 
 
 def main():
@@ -31,9 +46,10 @@ def main():
         '/': {
             'request.dispatch': cherrypy.dispatch.MethodDispatcher(),
             # 'tools.sessions.on': True,  # future need?
-            'tools.response_headers.on': True,
             'tools.response_headers.headers': [('Content-Type', 'application/json')],
+            'tools.response_headers.on': True,
             'tools.secureheaders.on': True,
+            'tools.corsheaders.on': True,
             'tools.json_in.force': False  # "If the 'force' argument is True (the default), then
                                           # entities of other content types will not be allowed;
                                           # '415 Unsupported Media Type' is raised instead." per

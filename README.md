@@ -9,6 +9,16 @@ Create a shortened URL from an original URL and retrieve an original URL from a 
 - `GET` - Fetches data including both URLs; based on **_short URL_**.
 - `POST` - Fetches data including both URLs; based on **_original URL_**.
 
+## `Content-Type` Header
+
+`CURL` and Python `Requests` library do not require passing of the `Content-Type` header.
+If using AJAX, one of the following `Content-Type` headers must be used:
+
+- 'Content-Type: application/json'
+- 'Content-Type: text/plain'
+
+_**Note:** you will need to pass along valid JSON data with them as well. Please see example below._
+
 ## URI structure
 
 **ShortURL API** follows `REST` standards by letting the `HTTP` **_method_** passed to it determine what
@@ -175,6 +185,47 @@ If you pass in an incorrect base URL, then you will only receive an HTTP status 
     >>> r.status_code, r.json()
     (400, {'error': 'ERROR_INCORRECT_OR_MISSING_PARAM', 'code': 400, 'status': 'ERROR'})
     ```
+
+**AJAX (jQuery):**
+
+- **`POST`**
+
+    ```javascript
+    jQuery( function($) {
+        params = {'original_url': 'http://somelongurl.com/with/all/this/stuff'}
+        json_params = JSON.stringify(params)
+        $.ajax({
+            url: 'http://localhost:8080/shorturl/v1',
+            type: 'POST',
+            contentType: 'application/json',  // contentType must be supplied (see above)
+            data: json_params  // must supply valid JSON
+        }).done(function(data) {
+            // do stuff
+        }).fail(function(jqXHR, statusText, errorThrown) {
+            // do stuff
+        });
+    });
+    ```
+
+- **`GET`**
+
+    ```javascript
+    jQuery( function($) {
+        params = {'short_url': 'http://shortu.rl/rQ'}
+        json_params = JSON.stringify(params)
+        $.ajax({
+            url: 'http://localhost:8080/shorturl/v1',
+            type: 'GET',
+            contentType: 'text/plain',  // contentType must be supplied (see above)
+            data: json_params  // must supply valid JSON
+        }).done(function(data) {
+            // do stuff
+        }).fail(function(jqXHR, statusText, errorThrown) {
+            // do stuff
+        });
+    }); 
+    ```
+
 
 ## Rate Limited
 
