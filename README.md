@@ -118,25 +118,24 @@ If you pass in an incorrect base URL, then you will only receive an HTTP status 
 
 - **Successful `GET`**
 
-    ```bash
-    $ curl "http://shortu.rl/shorturl/v1?short_url=http://shortu.rl/rQ"
-    {"created": "2017-01-08 05:20:15.320", "original_url": "http://example.com/", "status": "OK", "short_url": "http://shortu.rl/rQ"}
-    ```
+```bash
+$ curl "http://shortu.rl/shorturl/v1?short_url=http://shortu.rl/rQ"
+{"created": "2017-01-08 05:20:15.320", "original_url": "http://example.com/", "status": "OK", "short_url": "http://shortu.rl/rQ"}
+```
 
 - **Successful `GET` (_with **multiple** params in `original_url`_)**
-    
-    ```bash
-    $ curl http://shortu.rl/shorturl/v1 --data-urlencode "original_url=http://www.somedomain.com/long/url/test/2?params=test&something=other"
-    ```
+    - _**Note:** If you use the standard `-d` command, CURL will strip everything after the `&` so be sure to use the `--data-urlencode` option instead._
 
-    _**Note:** If you use the standard `-d` command, CURL will strip everything after the `&` so be sure to use the `--data-urlencode` option instead.
+```bash
+$ curl http://shortu.rl/shorturl/v1 --data-urlencode "original_url=http://www.somedomain.com/long/url/test/2?params=test&something=other"
+```
 
 - **Successful `POST`**
 
-    ```bash
-    $ curl http://shortu.rl/shorturl/v1 -d "original_url=http://www.somedomain.com/long/url/test"string/?param=testing&another=yep'})
-    {"created": "2017-01-08 07:33:07.094", "original_url": "http://www.somedomain.com/long/url/test", "status": "OK", "short_url": "http://shortu.rl/rY"}
-    ```
+```bash
+$ curl http://shortu.rl/shorturl/v1 -d "original_url=http://www.somedomain.com/long/url/test"string/?param=testing&another=yep'})
+{"created": "2017-01-08 07:33:07.094", "original_url": "http://www.somedomain.com/long/url/test", "status": "OK", "short_url": "http://shortu.rl/rY"}
+```
 
 **Python `Requests` Library:**
 
@@ -147,84 +146,84 @@ If you pass in an incorrect base URL, then you will only receive an HTTP status 
 
 - **Successful `GET`**
 
-    ```bash
-    >>> r = s.get('http://shortu.rl/shorturl/v1', params={'short_url': 'http://shortu.rl/rQ'})
-    >>> r.status_code, r.json()
-    (200, {'created': '2017-01-08 05:20:15.320', 'short_url': 'http://shortu.rl/rQ', 'original_url': 'http://example.com/', 'status': 'OK'})
-    ```
+```bash
+>>> r = s.get('http://shortu.rl/shorturl/v1', params={'short_url': 'http://shortu.rl/rQ'})
+>>> r.status_code, r.json()
+(200, {'created': '2017-01-08 05:20:15.320', 'short_url': 'http://shortu.rl/rQ', 'original_url': 'http://example.com/', 'status': 'OK'})
+```
 
 - **Successful `POST`**
 
-    ```bash
-    >>> r = s.post('http://shortu.rl/shorturl/v1', params={'original_url': 'http://www.somedomain.com/this/long/url/'})
-    >>> r.status_code, r.json()
-    (200, {'created': '2017-01-08 07:57:35.655', 'short_url': 'http://shortu.rl/r0', 'original_url': 'http://www.somedomain.com/this/long/url/', 'status': 'OK'})
-    ```
+```bash
+>>> r = s.post('http://shortu.rl/shorturl/v1', params={'original_url': 'http://www.somedomain.com/this/long/url/'})
+>>> r.status_code, r.json()
+(200, {'created': '2017-01-08 07:57:35.655', 'short_url': 'http://shortu.rl/r0', 'original_url': 'http://www.somedomain.com/this/long/url/', 'status': 'OK'})
+```
 
 - **Failed `GET`/`POST` (`POST` shown. _missing `shorturl` in URI_)**
+    - _**Note:** r.text used here instead of r.json() - avoids json decoding error_
 
-    _Note: r.text used here instead of r.json() - avoids json decoding error_
-    ```bash
-    >>> r = s.post('http://shortu.rl/v1', params={'original_url': 'http://www.somedomain.com/this/long/url/'})
-    >>> r.status_code, r.text
-    (404, '')
-    ```
+```bash
+>>> r = s.post('http://shortu.rl/v1', params={'original_url': 'http://www.somedomain.com/this/long/url/'})
+>>> r.status_code, r.text
+(404, '')
+```
 
 - **Failed `POST` (_incorrect `<original_url>`_)**
     
-    ```bash
-    >>> r = s.post('http://shortu.rl/shorturl/v1', params={'original_url': ''})
-    >>> r.status_code, r.json()
-    (400, {'error': 'ERROR_INCORRECT_OR_MISSING_PARAM', 'code': 400, 'status': 'ERROR'})
-    ```
+```bash
+>>> r = s.post('http://shortu.rl/shorturl/v1', params={'original_url': ''})
+>>> r.status_code, r.json()
+(400, {'error': 'ERROR_INCORRECT_OR_MISSING_PARAM', 'code': 400, 'status': 'ERROR'})
+```
 
 - **Failed `GET` (_incorrect `<short_url>`_)**
     
-    ```bash
-    >>> r = s.get('http://shortu.rl/shorturl/v1', params={})
-    >>> r.status_code, r.json()
-    (400, {'error': 'ERROR_INCORRECT_OR_MISSING_PARAM', 'code': 400, 'status': 'ERROR'})
-    ```
+```bash
+>>> r = s.get('http://shortu.rl/shorturl/v1', params={})
+>>> r.status_code, r.json()
+(400, {'error': 'ERROR_INCORRECT_OR_MISSING_PARAM', 'code': 400, 'status': 'ERROR'})
+```
 
 **AJAX (jQuery):**
 
 - **`POST`**
 
-    ```javascript
-    jQuery( function($) {
-        params = {'original_url': 'http://somelongurl.com/with/all/this/stuff'}
-        json_params = JSON.stringify(params)
-        $.ajax({
-            url: 'http://localhost:8080/shorturl/v1',
-            type: 'POST',
-            contentType: 'application/json',  // contentType must be supplied (see above)
-            data: json_params  // must supply valid JSON
-        }).done(function(data) {
-            // do stuff
-        }).fail(function(jqXHR, statusText, errorThrown) {
-            // do stuff
-        });
+```javascript
+jQuery( function($) {
+    params = {'original_url': 'http://somelongurl.com/with/all/this/stuff'}
+    json_params = JSON.stringify(params)
+    $.ajax({
+        url: 'http://localhost:8080/shorturl/v1',
+        type: 'POST',
+        contentType: 'application/json',  // contentType must be supplied (see above)
+        data: json_params  // must supply valid JSON
+    }).done(function(data) {
+        // do stuff
+    }).fail(function(jqXHR, statusText, errorThrown) {
+        // do stuff
     });
-    ```
+});
+```
 
 - **`GET`**
 
-    ```javascript
-    jQuery( function($) {
-        params = {'short_url': 'http://shortu.rl/rQ'}
-        json_params = JSON.stringify(params)
-        $.ajax({
-            url: 'http://localhost:8080/shorturl/v1',
-            type: 'GET',
-            contentType: 'text/plain',  // contentType must be supplied (see above)
-            data: json_params  // must supply valid JSON
-        }).done(function(data) {
-            // do stuff
-        }).fail(function(jqXHR, statusText, errorThrown) {
-            // do stuff
-        });
-    }); 
-    ```
+```javascript
+jQuery( function($) {
+    params = {'short_url': 'http://shortu.rl/rQ'}
+    json_params = JSON.stringify(params)
+    $.ajax({
+        url: 'http://localhost:8080/shorturl/v1',
+        type: 'GET',
+        contentType: 'text/plain',  // contentType must be supplied (see above)
+        data: json_params  // must supply valid JSON
+    }).done(function(data) {
+        // do stuff
+    }).fail(function(jqXHR, statusText, errorThrown) {
+        // do stuff
+    });
+}); 
+```
 
 
 ## Rate Limited
