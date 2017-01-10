@@ -4,10 +4,10 @@ Create a shortened URL from an original URL and retrieve an original URL from a 
 
 ## Accepted Methods
   
-`GET` | `POST`
-
-- `GET` - Fetches data including both URLs; based on **_short URL_**.
-- `POST` - Fetches data including both URLs; based on **_original URL_**.
+| Method | Description |
+| --- | --- |
+| `GET` | Fetches data including both URLs; based on **_short URL_** |
+| `POST` | Fetches data including both URLs; based on **_original URL_** |
 
 ## `Content-Type` Header
 
