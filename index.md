@@ -124,12 +124,11 @@ $ curl "http://shortu.rl/shorturl/v1?short_url=http://shortu.rl/rQ"
 ```
 
 - **Successful `GET` (_with **multiple** params in `original_url`_)**
-    
+    - _**Note:** If you use the standard `-d` command, CURL will strip everything after the `&` so be sure to use the `--data-urlencode` option instead.
+
 ```bash
 $ curl http://shortu.rl/shorturl/v1 --data-urlencode "original_url=http://www.somedomain.com/long/url/test/2?params=test&something=other"
 ```
-
-_**Note:** If you use the standard `-d` command, CURL will strip everything after the `&` so be sure to use the `--data-urlencode` option instead.
 
 - **Successful `POST`**
 
@@ -162,8 +161,8 @@ $ curl http://shortu.rl/shorturl/v1 -d "original_url=http://www.somedomain.com/l
 ```
 
 - **Failed `GET`/`POST` (`POST` shown. _missing `shorturl` in URI_)**
+    - _Note: r.text used here instead of r.json() - avoids json decoding error_
 
-_Note: r.text used here instead of r.json() - avoids json decoding error_
 ```bash
 >>> r = s.post('http://shortu.rl/v1', params={'original_url': 'http://www.somedomain.com/this/long/url/'})
 >>> r.status_code, r.text
