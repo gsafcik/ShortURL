@@ -117,8 +117,8 @@ If you pass in an incorrect base URL, then you will only receive an HTTP status 
 
 | HTTP Status Code | Description |
 | --- | --- |
-| `400` | Missing both version number and basename (e.g. missing `/shorturl/v1/`) |
-| `405` | Missing version number (e.g. missing `/v1/`) or basename (e.g. missing `/shorturl/`) |
+| `404` | Missing both version number and basename (e.g. missing `/shorturl/v1/`) |
+| `404` | Missing version number (e.g. missing `/v1/`) or basename (e.g. missing `/shorturl/`) |
 | `405` | Method not allowed (see **Accepted Methods** above) |
 
 ## Sample Calls
