@@ -36,13 +36,13 @@ _**Note:** you will need to pass along valid JSON data with them as well. Please
 `GET` format:
 
 ```bash
-http://54.153.101.249:8080/shorturl/v1/shorturl/v1/<SHORT_URL>
+http://54.153.101.249:8080/shorturl/v1/<SHORT_URL>
 ```
 
 `POST` format:
 
 ```bash
-http://54.153.101.249:8080/shorturl/v1/shorturl/v1/<ORIGINAL_URL>
+http://54.153.101.249:8080/shorturl/v1/<ORIGINAL_URL>
 ```
   
 ## Success Response
