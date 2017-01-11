@@ -2,17 +2,26 @@
 
 Create a shortened URL from an original URL and retrieve an original URL from a shortened URL.
 
+## Domain Name & Port
+
+Due to the lack of a domain name, the following IP address and port number are required to use **ShortULR API**.
+
+```bash
+http://52.8.43.12:8080/
+```
+
 ## Accepted Methods
   
-`GET` | `POST`
+| Method | Description |
+| --- | --- |
+| `GET` | Fetches data including both URLs; based on **_short URL_** |
+| `POST` | Fetches data including both URLs; based on **_original URL_** |
 
-- `GET` - Fetches data including both URLs; based on **_short URL_**.
-- `POST` - Fetches data including both URLs; based on **_original URL_**.
-
-## `Content-Type` Header
+## Content-Type Header
 
 `CURL` and Python `Requests` library do not require passing of the `Content-Type` header.
-If using AJAX, one of the following `Content-Type` headers must be used:
+
+For AJAX, one of the following `Content-Type` headers _must_ be used:
 
 - `'Content-Type: application/json'`
 - `'Content-Type: text/plain'`
@@ -22,18 +31,18 @@ _**Note:** you will need to pass along valid JSON data with them as well. Please
 ## URI structure
 
 **ShortURL API** follows `REST` standards by letting the `HTTP` **_method_** passed to it determine what
-**_action_** the API needs to take. _Make sure to pass the correct URL version with the chosen action._
+**_action_** the API needs to take. _Make sure to pass the correct URL version (`<SHORT_URL>` or `<ORIGINAL_URL>`) with the chosen action._
 
 `GET` format:
 
 ```bash
-http://shortu.rl/shorturl/v1/shorturl/v1/<SHORT_URL>
+http://52.8.43.12:8080/shorturl/v1/<SHORT_URL>
 ```
 
 `POST` format:
 
 ```bash
-http://shortu.rl/shorturl/v1/shorturl/v1/<ORIGINAL_URL>
+http://52.8.43.12:8080/shorturl/v1/<ORIGINAL_URL>
 ```
   
 ## Success Response
@@ -51,17 +60,17 @@ _AND_
 
 **Example:**
 
-* **Code:** 200 <br />
+* **HTTP status code:** 200 <br />
     **Content:**
     
-    ```bash
-    {
-        'short_url': 'http://shortu.rl/qM',
-        'original_url': 'http://example.com/hello-there/testing',
-        'created': '2017-01-05 02:57:10.366',
-        'status': 'OK'
-    }
-    ```
+```bash
+{
+    'short_url': 'http://52.8.43.12:8080/qM',
+    'original_url': 'http://example.com/hello-there/testing',
+    'created': '2017-01-05 02:57:10.366',
+    'status': 'OK'
+}
+```
  
 ## Error Response
 
@@ -77,16 +86,16 @@ _AND_
 
 **Example:**
 
-* **Code:** 400 <br />
+* **HTTP status code:** 400 <br />
     **Content:**
     
-    ```bash
-    {
-        'code': 400,
-        'error': 'ERROR_MALFORMED_REQUEST',
-        'status': 'ERROR'
-    }
-    ```
+```bash
+{
+    'code': 400,
+    'error': 'ERROR_MALFORMED_REQUEST',
+    'status': 'ERROR'
+}
+```
 
 ## Status Codes
 
@@ -100,44 +109,44 @@ _AND_
 | --- | --- | --- |
 | `ERROR_SHORT_URL_MALFORMED` | `400` | The `short_url` parameter value is not complete (or malformed in some way) |
 | `ERROR_INCORRECT_OR_MISSING_PARAM` | `400` | Missing the parameter value or the entire parameter altogether |
-| `ERROR_URL_DATA_NOT_PROCESSED` | `400` | Could not process the `original_url` |
+| `ERROR_URL_DATA_NOT_PROCESSED` | `400` | Could not process `original_url` |
 | `ERROR_ORIGINAL_URL_NOT_FOUND` | `404` | Could not find data based on given `short_url` |
 | `ERROR_URL_DATA_NOT_FOUND` | `404` | Could not find data even though it should be there (_internal error_) |
 
-If you pass in an incorrect base URL, then you will only receive an HTTP status code (no JSON formatted **Error**).
+If you pass in an incorrect base URL, then you will only receive an HTTP status code (no `JSON` **Error**).
 
 | HTTP Status Code | Description |
 | --- | --- |
-| `400` | Missing both version number and basename (e.g. missing `/shorturl/v1/`) |
-| `405` | Missing version number (e.g. missing `/v1/`) or basename (e.g. missing `/shorturl/`) |
+| `404` | Missing both version number and basename (e.g. missing `/shorturl/v1/`) |
+| `404` | Missing version number (e.g. missing `/v1/`) or basename (e.g. missing `/shorturl/`) |
 | `405` | Method not allowed (see **Accepted Methods** above) |
 
 ## Sample Calls
 
-**CURL**
+### CURL
 
 - **Successful `GET`**
 
 ```bash
-$ curl "http://shortu.rl/shorturl/v1?short_url=http://shortu.rl/rQ"
-{"created": "2017-01-08 05:20:15.320", "original_url": "http://example.com/", "status": "OK", "short_url": "http://shortu.rl/rQ"}
+$ curl "http://52.8.43.12:8080/shorturl/v1?short_url=http://52.8.43.12:8080/rQ"
+{"created": "2017-01-08 05:20:15.320", "original_url": "http://example.com/", "status": "OK", "short_url": "http://52.8.43.12:8080/rQ"}
 ```
 
 - **Successful `GET` (_with **multiple** params in `original_url`_)**
     - _**Note:** If you use the standard `-d` command, CURL will strip everything after the `&` so be sure to use the `--data-urlencode` option instead._
 
 ```bash
-$ curl http://shortu.rl/shorturl/v1 --data-urlencode "original_url=http://www.somedomain.com/long/url/test/2?params=test&something=other"
+$ curl http://52.8.43.12:8080/shorturl/v1 --data-urlencode "original_url=http://www.somedomain.com/long/url/test/2?params=test&something=other"
 ```
 
 - **Successful `POST`**
 
 ```bash
-$ curl http://shortu.rl/shorturl/v1 -d "original_url=http://www.somedomain.com/long/url/test"string/?param=testing&another=yep'})
-{"created": "2017-01-08 07:33:07.094", "original_url": "http://www.somedomain.com/long/url/test", "status": "OK", "short_url": "http://shortu.rl/rY"}
+$ curl http://52.8.43.12:8080/shorturl/v1 -d "original_url=http://www.somedomain.com/long/url/test"string/?param=testing&another=yep'})
+{"created": "2017-01-08 07:33:07.094", "original_url": "http://www.somedomain.com/long/url/test", "status": "OK", "short_url": "http://52.8.43.12:8080/rY"}
 ```
 
-**Python `Requests` Library:**
+### Python Requests Library
 
 ```bash
     >>> import requests
@@ -147,24 +156,24 @@ $ curl http://shortu.rl/shorturl/v1 -d "original_url=http://www.somedomain.com/l
 - **Successful `GET`**
 
 ```bash
->>> r = s.get('http://shortu.rl/shorturl/v1', params={'short_url': 'http://shortu.rl/rQ'})
+>>> r = s.get('http://52.8.43.12:8080/shorturl/v1', params={'short_url': 'http://52.8.43.12:8080/rQ'})
 >>> r.status_code, r.json()
-(200, {'created': '2017-01-08 05:20:15.320', 'short_url': 'http://shortu.rl/rQ', 'original_url': 'http://example.com/', 'status': 'OK'})
+(200, {'created': '2017-01-08 05:20:15.320', 'short_url': 'http://52.8.43.12:8080/rQ', 'original_url': 'http://example.com/', 'status': 'OK'})
 ```
 
 - **Successful `POST`**
 
 ```bash
->>> r = s.post('http://shortu.rl/shorturl/v1', params={'original_url': 'http://www.somedomain.com/this/long/url/'})
+>>> r = s.post('http://52.8.43.12:8080/shorturl/v1', params={'original_url': 'http://www.somedomain.com/this/long/url/'})
 >>> r.status_code, r.json()
-(200, {'created': '2017-01-08 07:57:35.655', 'short_url': 'http://shortu.rl/r0', 'original_url': 'http://www.somedomain.com/this/long/url/', 'status': 'OK'})
+(200, {'created': '2017-01-08 07:57:35.655', 'short_url': 'http://52.8.43.12:8080/r0', 'original_url': 'http://www.somedomain.com/this/long/url/', 'status': 'OK'})
 ```
 
 - **Failed `GET`/`POST` (`POST` shown. _missing `shorturl` in URI_)**
     - _**Note:** r.text used here instead of r.json() - avoids json decoding error_
 
 ```bash
->>> r = s.post('http://shortu.rl/v1', params={'original_url': 'http://www.somedomain.com/this/long/url/'})
+>>> r = s.post('http://52.8.43.12:8080/v1', params={'original_url': 'http://www.somedomain.com/this/long/url/'})
 >>> r.status_code, r.text
 (404, '')
 ```
@@ -172,7 +181,7 @@ $ curl http://shortu.rl/shorturl/v1 -d "original_url=http://www.somedomain.com/l
 - **Failed `POST` (_incorrect `<original_url>`_)**
     
 ```bash
->>> r = s.post('http://shortu.rl/shorturl/v1', params={'original_url': ''})
+>>> r = s.post('http://52.8.43.12:8080/shorturl/v1', params={'original_url': ''})
 >>> r.status_code, r.json()
 (400, {'error': 'ERROR_INCORRECT_OR_MISSING_PARAM', 'code': 400, 'status': 'ERROR'})
 ```
@@ -180,12 +189,12 @@ $ curl http://shortu.rl/shorturl/v1 -d "original_url=http://www.somedomain.com/l
 - **Failed `GET` (_incorrect `<short_url>`_)**
     
 ```bash
->>> r = s.get('http://shortu.rl/shorturl/v1', params={})
+>>> r = s.get('http://52.8.43.12:8080/shorturl/v1', params={})
 >>> r.status_code, r.json()
 (400, {'error': 'ERROR_INCORRECT_OR_MISSING_PARAM', 'code': 400, 'status': 'ERROR'})
 ```
 
-**AJAX (jQuery):**
+### AJAX (jQuery)
 
 - **`POST`**
 
@@ -194,7 +203,7 @@ jQuery( function($) {
     params = {'original_url': 'http://somelongurl.com/with/all/this/stuff'}
     json_params = JSON.stringify(params)
     $.ajax({
-        url: 'http://localhost:8080/shorturl/v1',
+        url: 'http://52.8.43.12:8080/shorturl/v1',
         type: 'POST',
         contentType: 'application/json',  // contentType must be supplied (see above)
         data: json_params  // must supply valid JSON
@@ -210,10 +219,10 @@ jQuery( function($) {
 
 ```javascript
 jQuery( function($) {
-    params = {'short_url': 'http://shortu.rl/rQ'}
+    params = {'short_url': 'http://52.8.43.12:8080/rQ'}
     json_params = JSON.stringify(params)
     $.ajax({
-        url: 'http://localhost:8080/shorturl/v1',
+        url: 'http://52.8.43.12:8080/shorturl/v1',
         type: 'GET',
         contentType: 'text/plain',  // contentType must be supplied (see above)
         data: json_params  // must supply valid JSON
@@ -230,15 +239,10 @@ jQuery( function($) {
 
 The **ShortURL API** is currently rate limited to two (2) requests per second.
 
-## Note to Developers
-
-It may seem that having to pass `http://shortu.rl/shorturl/v1` in (say, rather than just `http://shortu.rl/v1`) is redundant
-but keep in mind that the **ShortURL API** is part of a suite of APIs offered by **shortu.rl**.
-
 ## Roadmap
 
 - Add unit testing
 - Add a front-end website for the ShortURL API
-- Add API keys for tracking purposes - if Oauth1.0a will be a while
-- Add authorization via Oauth1.0a - TBD
 - Add Analytics
+    - Add API keys for tracking purposes - if Oauth1.0a will be a while
+    - Add authorization via Oauth1.0a - TBD
