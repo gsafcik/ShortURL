@@ -7,7 +7,7 @@ Create a shortened URL from an original URL and retrieve an original URL from a 
 Due to the lack of a domain name, the following IP address and port number are required to use **ShortULR API**.
 
 ```bash
-http://54.153.101.249:8080/
+http://52.8.43.12:8080/
 ```
 
 ## Accepted Methods
@@ -36,13 +36,13 @@ _**Note:** you will need to pass along valid JSON data with them as well. Please
 `GET` format:
 
 ```bash
-http://54.153.101.249:8080/shorturl/v1/<SHORT_URL>
+http://52.8.43.12:8080/shorturl/v1/<SHORT_URL>
 ```
 
 `POST` format:
 
 ```bash
-http://54.153.101.249:8080/shorturl/v1/<ORIGINAL_URL>
+http://52.8.43.12:8080/shorturl/v1/<ORIGINAL_URL>
 ```
   
 ## Success Response
@@ -65,7 +65,7 @@ _AND_
     
 ```bash
 {
-    'short_url': 'http://54.153.101.249:8080/qM',
+    'short_url': 'http://52.8.43.12:8080/qM',
     'original_url': 'http://example.com/hello-there/testing',
     'created': '2017-01-05 02:57:10.366',
     'status': 'OK'
@@ -128,22 +128,22 @@ If you pass in an incorrect base URL, then you will only receive an HTTP status 
 - **Successful `GET`**
 
 ```bash
-$ curl "http://54.153.101.249:8080/shorturl/v1?short_url=http://54.153.101.249:8080/rQ"
-{"created": "2017-01-08 05:20:15.320", "original_url": "http://example.com/", "status": "OK", "short_url": "http://54.153.101.249:8080/rQ"}
+$ curl "http://52.8.43.12:8080/shorturl/v1?short_url=http://52.8.43.12:8080/rQ"
+{"created": "2017-01-08 05:20:15.320", "original_url": "http://example.com/", "status": "OK", "short_url": "http://52.8.43.12:8080/rQ"}
 ```
 
 - **Successful `GET` (_with **multiple** params in `original_url`_)**
     - _**Note:** If you use the standard `-d` command, CURL will strip everything after the `&` so be sure to use the `--data-urlencode` option instead._
 
 ```bash
-$ curl http://54.153.101.249:8080/shorturl/v1 --data-urlencode "original_url=http://www.somedomain.com/long/url/test/2?params=test&something=other"
+$ curl http://52.8.43.12:8080/shorturl/v1 --data-urlencode "original_url=http://www.somedomain.com/long/url/test/2?params=test&something=other"
 ```
 
 - **Successful `POST`**
 
 ```bash
-$ curl http://54.153.101.249:8080/shorturl/v1 -d "original_url=http://www.somedomain.com/long/url/test"string/?param=testing&another=yep'})
-{"created": "2017-01-08 07:33:07.094", "original_url": "http://www.somedomain.com/long/url/test", "status": "OK", "short_url": "http://54.153.101.249:8080/rY"}
+$ curl http://52.8.43.12:8080/shorturl/v1 -d "original_url=http://www.somedomain.com/long/url/test"string/?param=testing&another=yep'})
+{"created": "2017-01-08 07:33:07.094", "original_url": "http://www.somedomain.com/long/url/test", "status": "OK", "short_url": "http://52.8.43.12:8080/rY"}
 ```
 
 ### Python Requests Library
@@ -156,24 +156,24 @@ $ curl http://54.153.101.249:8080/shorturl/v1 -d "original_url=http://www.somedo
 - **Successful `GET`**
 
 ```bash
->>> r = s.get('http://54.153.101.249:8080/shorturl/v1', params={'short_url': 'http://54.153.101.249:8080/rQ'})
+>>> r = s.get('http://52.8.43.12:8080/shorturl/v1', params={'short_url': 'http://52.8.43.12:8080/rQ'})
 >>> r.status_code, r.json()
-(200, {'created': '2017-01-08 05:20:15.320', 'short_url': 'http://54.153.101.249:8080/rQ', 'original_url': 'http://example.com/', 'status': 'OK'})
+(200, {'created': '2017-01-08 05:20:15.320', 'short_url': 'http://52.8.43.12:8080/rQ', 'original_url': 'http://example.com/', 'status': 'OK'})
 ```
 
 - **Successful `POST`**
 
 ```bash
->>> r = s.post('http://54.153.101.249:8080/shorturl/v1', params={'original_url': 'http://www.somedomain.com/this/long/url/'})
+>>> r = s.post('http://52.8.43.12:8080/shorturl/v1', params={'original_url': 'http://www.somedomain.com/this/long/url/'})
 >>> r.status_code, r.json()
-(200, {'created': '2017-01-08 07:57:35.655', 'short_url': 'http://54.153.101.249:8080/r0', 'original_url': 'http://www.somedomain.com/this/long/url/', 'status': 'OK'})
+(200, {'created': '2017-01-08 07:57:35.655', 'short_url': 'http://52.8.43.12:8080/r0', 'original_url': 'http://www.somedomain.com/this/long/url/', 'status': 'OK'})
 ```
 
 - **Failed `GET`/`POST` (`POST` shown. _missing `shorturl` in URI_)**
     - _**Note:** r.text used here instead of r.json() - avoids json decoding error_
 
 ```bash
->>> r = s.post('http://54.153.101.249:8080/v1', params={'original_url': 'http://www.somedomain.com/this/long/url/'})
+>>> r = s.post('http://52.8.43.12:8080/v1', params={'original_url': 'http://www.somedomain.com/this/long/url/'})
 >>> r.status_code, r.text
 (404, '')
 ```
@@ -181,7 +181,7 @@ $ curl http://54.153.101.249:8080/shorturl/v1 -d "original_url=http://www.somedo
 - **Failed `POST` (_incorrect `<original_url>`_)**
     
 ```bash
->>> r = s.post('http://54.153.101.249:8080/shorturl/v1', params={'original_url': ''})
+>>> r = s.post('http://52.8.43.12:8080/shorturl/v1', params={'original_url': ''})
 >>> r.status_code, r.json()
 (400, {'error': 'ERROR_INCORRECT_OR_MISSING_PARAM', 'code': 400, 'status': 'ERROR'})
 ```
@@ -189,7 +189,7 @@ $ curl http://54.153.101.249:8080/shorturl/v1 -d "original_url=http://www.somedo
 - **Failed `GET` (_incorrect `<short_url>`_)**
     
 ```bash
->>> r = s.get('http://54.153.101.249:8080/shorturl/v1', params={})
+>>> r = s.get('http://52.8.43.12:8080/shorturl/v1', params={})
 >>> r.status_code, r.json()
 (400, {'error': 'ERROR_INCORRECT_OR_MISSING_PARAM', 'code': 400, 'status': 'ERROR'})
 ```
@@ -203,7 +203,7 @@ jQuery( function($) {
     params = {'original_url': 'http://somelongurl.com/with/all/this/stuff'}
     json_params = JSON.stringify(params)
     $.ajax({
-        url: 'http://54.153.101.249:8080/shorturl/v1',
+        url: 'http://52.8.43.12:8080/shorturl/v1',
         type: 'POST',
         contentType: 'application/json',  // contentType must be supplied (see above)
         data: json_params  // must supply valid JSON
@@ -219,10 +219,10 @@ jQuery( function($) {
 
 ```javascript
 jQuery( function($) {
-    params = {'short_url': 'http://54.153.101.249:8080/rQ'}
+    params = {'short_url': 'http://52.8.43.12:8080/rQ'}
     json_params = JSON.stringify(params)
     $.ajax({
-        url: 'http://54.153.101.249:8080/shorturl/v1',
+        url: 'http://52.8.43.12:8080/shorturl/v1',
         type: 'GET',
         contentType: 'text/plain',  // contentType must be supplied (see above)
         data: json_params  // must supply valid JSON
