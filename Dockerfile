@@ -3,6 +3,6 @@ MAINTAINER Geoff Safcik
 LABEL version="0.1"
 
 COPY "$PWD" /app
-RUN pip install -r /app/requirements.txt
+RUN pip3 install -r /app/requirements.txt
 
 ENTRYPOINT ["python3", "/app/main.py"]
