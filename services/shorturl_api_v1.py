@@ -96,7 +96,7 @@ class ShortURLAPIv1(object):
         successful example:
 
         {
-            'short_url': 'http://shortu.rl/qM',
+            'short_url': 'http://52.8.43.12/qM',
             'original_url': 'http://example.com/hello-there/testing',
             'created': '2017-01-05 02:57:10.366'
         }
@@ -120,7 +120,7 @@ class ShortURLAPIv1(object):
         successful example:
 
         {
-            'short_url': 'http://shortu.rl/qM',
+            'short_url': 'http://52.8.43.12/qM',
             'original_url': 'http://example.com/hello-there/testing',
             'created': '2017-01-05 02:57:10.366'
         }

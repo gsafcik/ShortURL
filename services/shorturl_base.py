@@ -8,7 +8,7 @@ class ShortURLBase(object):
 
     ALPHABET = str('abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
     BASE = len(ALPHABET)
-    SHORT_URL_BASE = 'http://shortu.rl'
+    SHORT_URL_BASE = 'http://52.8.43.12'
 
     STATUS_OK = 'OK'
     STATUS_ERROR = 'ERROR'
